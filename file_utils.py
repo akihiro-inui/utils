@@ -11,10 +11,13 @@ import pandas as pd
 import numpy as np
 import datetime
 import ntpath
+import json
 
 
 class FileUtil:
-
+    """
+    File related modules
+    """
     @staticmethod
     def is_valid_file(input_filename: str) -> bool:
         """
@@ -159,7 +162,7 @@ class FileUtil:
         :param : output_text_file_path: csv file path to write out the input list
         """
         # Write list as csv file
-        with open(output_csv_file_path, 'w') as f:
+        with open(output_csv_file_path, 'w', encoding='utf-8') as f:
             for value in input_list:
                 f.write(str(value) + ',')
 
@@ -198,7 +201,8 @@ class FileUtil:
         :param  input_dataframe: input csv file
         :return : output data frame
         """
-        return pd.read_csv(input_filename)
+        assert FileUtil.is_valid_file(input_filename), "File does not exist"
+        return pd.read_csv(input_filename, encoding='utf-8')
 
     @staticmethod
     def get_time():
@@ -226,3 +230,47 @@ class FileUtil:
         """
         return np.load(input_file_path)
 
+    @staticmethod
+    def read_json(input_json_file_path: str):
+        """
+        Read json file, check path and return as dictionary
+        :param input_json_file_path: Input json file
+        :return: params_dict: Dictionary stores parameters in json file
+        """
+        # Check file path validity
+        assert FileUtil.is_valid_file(input_json_file_path), "File does not exist"
+
+        # Read json and store its content in dictionary
+        with open(input_json_file_path, "r") as read_file:
+            params_dict = json.load(read_file)
+        return params_dict
+
+    @staticmethod
+    def dict2csv(input_dictionary: dict, output_csv_file_path: str, overwrite: bool):
+        """
+        Write csv file from dictionary
+        :param input_dictionary: Dictionary to write
+        :param output_csv_file_path: CSV file to write
+        """
+        try:
+            if overwrite:
+                with open(output_csv_file_path, 'a', encoding='utf-8') as csvfile:
+                    writer = csv.DictWriter(csvfile, input_dictionary.keys())
+                    writer.writerow(input_dictionary)
+            else:
+                with open(output_csv_file_path, 'w', encoding='utf-8') as csvfile:
+                    writer = csv.DictWriter(csvfile, input_dictionary.keys())
+                    writer.writerow(input_dictionary)
+        except IOError:
+            print("I/O error")
+
+    @staticmethod
+    def write_csv_header(input_dictionary: dict, output_csv_file_path: str):
+        """
+        Write header in csv file
+        :param input_dictionary:
+        :param output_csv_file_path:
+        """
+        with open(output_csv_file_path, 'w', encoding='utf-8') as csvfile:
+            writer = csv.DictWriter(csvfile, input_dictionary.keys())
+            writer.writeheader()

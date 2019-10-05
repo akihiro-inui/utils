@@ -7,51 +7,16 @@ ainui@jabra.com
 """
 
 # Import libraries
-import pandas as pd
+import os
 import requests
 import datetime
-import os
+import pandas as pd
 
 
-class FileUtil:
+class DataUtil:
     """
     # Functions for data manipulation
     """
-    @staticmethod
-    def is_valid_file(input_filename: str) -> bool:
-        """
-        # Confirm the filename is a valid file
-        :param   input_filename: the name of the file to read in.
-        :return  True if it is valid file and False if it is invalid file
-        """
-        return not FileUtil.is_invalid_file(input_filename)
-
-    @staticmethod
-    def is_invalid_file(input_filename: str) -> bool:
-        """
-        # Confirm the filename is a valid file
-        :param   input_filename: the name of the file to read in.
-        :return  True if it is invalid file and False if it is valid file
-        """
-        return not os.path.isfile(input_filename)
-
-    @staticmethod
-    def is_valid_directory(directory_path: str) -> bool:
-        """
-        # Check if the directory path is a valid or invalid directory
-        :param directory_path:
-        :return: True if it is valid directory and False if it is invalid directory
-        """
-        return not FileUtil.is_invalid_directory(directory_path)
-
-    @staticmethod
-    def is_invalid_directory(directory_path: str) -> bool:
-        """
-        # Check if the directory path is a valid or invalid directory
-        :param  directory_path:
-        :return: True if it is invalid directory and False if it is valid directory
-        """
-        return not os.path.isdir(directory_path)
 
     @staticmethod
     def excel2dataframe(input_file_path: str):
@@ -103,7 +68,7 @@ class FileUtil:
         return input_dataframe
 
     @staticmethod
-    def write2csv(input_dataframe, output_filename: str):
+    def dataframe2csv(input_dataframe, output_filename: str):
         """
         # Write data frame to csv file
         :param  input_dataframe: input pandas data frame
