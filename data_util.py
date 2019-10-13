@@ -139,3 +139,21 @@ class DataUtil:
                 flat_list.append(feature)
         return flat_list
 
+    @staticmethod
+    def factorize_label(input_dataframe, column_name: str, new_column_name: str):
+        """
+        # Factorize str label to num label
+        :param  input_dataframe : input pandas data frame
+        :param  column_name : column name to factorize
+        :param  new_column_name: column to be created
+        :return factorized_dataframe : data frame with factorized label
+        :return label_list : list which stores label names
+        """
+        # Make a copy of the data frame
+        factorized_dataframe = input_dataframe.copy()
+
+        # Factorize string label
+        factorized_column, unique_names = pd.factorize(factorized_dataframe[column_name])
+        factorized_dataframe[new_column_name] = factorized_column
+
+        return factorized_dataframe
